@@ -1,0 +1,16 @@
+{% extends "home.html" %}
+
+{% block content %}
+
+<form id="joinform" action="{{url_for('join')}}" method="post">
+    <h2>Join</h2>
+    <p><label><input type="text" name="username" required pattern="^\w+$"> Username</label></p>
+    <p><label><input type="text" name="name" required> Full Name </label></p>
+    <p><label><input type="text" name="email" required> Email </label></p>
+    <p><label><input type="text" name="phone" required> Phone Number </label></p>
+    <p><label><input type="text" name="grade" required> School Grade </label></p>
+    <p><label><input type="password" name="password1" required> Password </label></p>
+    <p><label><input type="password" name="password2" required> Password again </label></p>
+    <p><button type="submit">Submit</button></p>
+</form>
+{% endblock %}

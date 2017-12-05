@@ -1,0 +1,31 @@
+<!--Displays page that allows user to select a movie with incomplete information 
+from a dropdown list of all movies in the mvohra_db database. 
+
+Meher Vohra and Nancy Ho
+19/11/17
+CS 304 Assignment 6: Flask 2
+-->
+
+{% extends "logAdmin.html" %}
+ 
+{# replaces default content block #}
+{% block content %} 
+
+      <!--Select form that user can choose an incomplete movie from.-->          
+                        <!--Fills out the drop down menu with incomplete movies-->     
+        
+        <table>
+        <tr>
+          <th>Day</th>
+          <th>Time</th>
+          <th>Grade</th>
+        </tr>
+        {% for class in allClasses %}
+            <tr>
+            <td><a href="/class/{{class.cid}}/"> {{class.day}} </a></td>
+            <td> {{class.startTime}} - {{class.endTime}} </td>
+            <td> {{class.grade}} </td>
+            </tr>
+        {% endfor %} 
+        </table>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block navbar %}
+   <li class="nav-item">
+        <a class="nav-link js-scroll-trigger" href="/student/{{sid}}">My Profile</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link js-scroll-trigger" href="/logout">Sign Out</a>
+    </li>
+{% endblock %}
+    {% block buttons %}   
+    <a href="/schedule/" class="btn btn-outline btn-xl">Classes Record</a>
+    <a href="/payment" class="btn btn-outline btn-xl">Payment</a>
+    {% endblock %}

@@ -1,0 +1,10 @@
+{% extends "home.html" %}
+
+{% block content %}
+<form id="loginform" action="{{url_for('login')}}" method="post">
+    <h2>Login</h2>
+    <p><label>Username: <input type="text" name="username" required pattern="^\w+$"></label></p>
+    <p><label>Password: <input type="password" name="password" required></label></p>
+    <p><button type="submit">Submit</button></p>
+</form>
+{% endblock %}

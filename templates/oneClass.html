@@ -1,0 +1,29 @@
+{% if session['username']=="admin" %}
+  {% extends "logAdmin.html" %}
+{% else %}
+  {% extends "logUser.html" %}
+{% endif %}
+ 
+{# replaces default content block #}
+{% block content %} 
+    <!--Form that shows all movie data. Contains fields that user can update-->          
+      <table>
+        <tr>
+          <td><label>Grade </label></td>
+          <td>{{grade}}</td>
+        </tr>
+        <tr>
+          <td><label>Day </label></td>
+          <td>{{day}}</td>
+        </tr>
+        <tr>
+          <td><label>Time </label></td>
+          <td>{{startTime}} to {{endTime}}</td>
+        </tr>
+        <p>Students</p>
+        {% for student in allStudents %}
+            <p><a href="/student/{{student.sid}}/">{{student.name}}</a></p>
+        {% endfor %} 
+      </table>
+
+{% endblock %}

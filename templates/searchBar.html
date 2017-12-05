@@ -1,0 +1,22 @@
+<!--
+searchBar.html
+Displays page that allows user to search for a movie title within
+the mvohra_db database.
+
+Meher Vohra and Nancy Ho
+19/11/17
+CS 304 Assignment 6: Flask 2
+-->
+
+{% extends "logAdmin.html" %}
+ 
+{# replaces default content block #}
+{% block content %} 
+    <!--Search bar form that user can type movie title into and click search.-->          
+	<form method=POST action="/search/">
+	       <label for="search-name">Student: </label>
+	       <input name="search-name" value="">
+	       <input type="submit" name="submit-btn" value="Search">
+	</form>
+ 
+{% endblock %}

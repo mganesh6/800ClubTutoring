@@ -1,0 +1,25 @@
+/* For flashed messages; make them stand out using red and italics */
+
+#messages {
+    color: red;
+    font-style: italic;
+}
+
+h1 {
+    font-size: 200%;
+    color: teal;
+}
+
+#loginform, #joinform {
+    display: inline-block;
+    border: 2px solid teal;
+    padding: 2ex 2em;
+}
+
+#logoutform button {
+    border: 2px solid teal;
+    background-color: #ccffff;
+    border-radius: 1ex;
+    padding: 2ex;
+    font-size: 1.5em;
+}

@@ -1,0 +1,49 @@
+{% extends "logAdmin.html" %}
+
+
+{% block content %} 
+<div class="page-header" style="text-align: center;">
+  <h1>Weekly Schedule</h1>
+</div>
+
+<div>
+<br>
+	  {% with classDays = days %}
+		  	{% if classDays %}
+			  	{% for d in classDays %}
+			  		<h3>{{d.day}}</h3>	
+				  	
+				  	<table class="table" style="background: white !important">
+					 <thead class="thead-inverse">
+					 	<tr>
+					 		<th></th>
+					 		<th>Start Time</th>
+					 		<th>End Time</th>
+					 		<th>Grade</th>
+						</tr>
+					 </thead>
+					 <tbody data-link="row" class="rowlink">
+					  {% with totalClasses = classes %}
+					  	{% if totalClasses %}
+					  		{% for c in totalClasses %}
+					  		{% if c.day == d.day %}
+					  			
+									<tr>
+										<td><a href='/class/{{c.cid}}/'>View</a></td>
+										<td>{{c.startTime}}</td>
+										<td>{{c.endTime}}</td>
+										<td>{{c.grade}}</td>		
+									</tr>
+								
+							{% endif %}
+							{% endfor %}
+						{% endif %}
+					{% endwith %}
+					</tbody>
+				 </table>
+				{% endfor %}
+			{% endif %}
+		  {% endwith %}
+	  </tbody>
+	</table>
+	{% endblock %}

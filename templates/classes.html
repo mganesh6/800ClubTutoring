@@ -1,0 +1,56 @@
+
+{% extends "base.html" %}
+
+{% block content %} 
+<div class="page-header" style="text-align: center;">
+  <h1>Upcoming & Past Classes</h1>
+</div>
+<div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    Select Month
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+  	{% with months = totalMonths%}
+	  	{% if months %}
+	  		{% for m in months %}
+				<li><a href="{{url_for('classes', sid=sid, month = m.month, year=m.year)}}">{{m.month}} {{m.year}}</a></li>
+			{% endfor %}
+		{% endif %}
+	  {% endwith %}
+  </ul>
+</div>
+
+<div>
+<br>
+
+<table class="table table-striped" style="background: white !important">
+	<thead class="thead-inverse">
+	  <tr>
+	    <th>Date</th>
+	    <th>Class ID</th> 
+	    <th>Day</th>
+	    <th>Start Time</th>
+	    <th>End Time</th>
+	    <th>Status</th>
+	  </tr>
+	 </thead>
+	  <tbody>
+	  {% with totalClasses = classes %}
+	  	{% if totalClasses %}
+	  		{% for c in totalClasses %}
+				<tr>
+					<td>{{c.date}}</td>
+					<td>{{c.cid}}</td>
+					<td>{{c.day}}</td>
+					<td>{{c.startTime}}</td>
+					<td>{{c.endTime}}</td>
+					<td>{{c.status}}</td>
+
+				</tr>
+			{% endfor %}
+		{% endif %}
+	  {% endwith %}
+	  </tbody>
+	</table>
+	{% endblock %}

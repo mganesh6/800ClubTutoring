@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block navbar %}
+    <li class="nav-item">
+        <a class="nav-link js-scroll-trigger" href="/logout">Sign Out</a>
+    </li>
+{% endblock %}
+    {% block buttons %}   
+    <a href="/admin-schedule" class="btn btn-outline btn-xl">Weekly Schedule</a>
+    <a href="/allStudents" class="btn btn-outline btn-xl">All Students</a>
+    <a href="/search" class="btn btn-outline btn-xl">Search Student</a>
+    <a href="/payment" class="btn btn-outline btn-xl">Payment</a>
+    {% endblock %}
