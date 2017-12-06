@@ -8,6 +8,8 @@
 <div class="page-header" style="text-align: center;">
   <h1>Upcoming & Past Classes</h1>
 </div>
+<p>To change your class time for one day, please click "Reschedule".
+
 <div class="dropdown">
   <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
     Select Month
@@ -36,6 +38,7 @@
 	    <th>Start Time</th>
 	    <th>End Time</th>
 	    <th>Status</th>
+	    <th></th>
 	  </tr>
 	 </thead>
 	  <tbody>
@@ -49,7 +52,9 @@
 					<td>{{c.startTime}}</td>
 					<td>{{c.endTime}}</td>
 					<td>{{c.status}}</td>
-
+					{% if c.status == 'scheduled' %}
+						<td><a href="{{url_for('reschedule', classDate=c.classDate)}}">Reschedule</a></td>
+					{% endif %}
 				</tr>
 			{% endfor %}
 		{% endif %}

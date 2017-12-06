@@ -1,0 +1,18 @@
+{% extends "logUser.html" %}
+
+{% block content %} 
+<div class="page-header" style="text-align: center;">
+  <h1>Please Confirm</h1>
+</div>
+<p>Do you want to cancel your class on {{dateSpecific.classDate}} from {{staticInfo.startTime}} to {{staticInfo.endTime}}?
+<br>
+
+<form method=POST action="/reschedule/{{dateSpecific.classDate}}">
+<input type="submit" name="submit" value="Yes" class="btn btn-outline btn-xl">
+<input type="submit" name="submit" value="No" class="btn btn-outline btn-xl">
+
+</form>
+
+<br>
+<p>Note: You will be prompted to select an alternative time slot on the next page. 
+{% endblock %} 
