@@ -58,7 +58,7 @@ def searchStudent(keyword):
 #Get all classes for a specific month/year for a given student
 def getMonthClasses(sid, month, year):
     curs = cursor()
-    curs.execute('select * from schedule inner join classes using (cid) where sid=%s and monthname(classDate)=%s and year(classDate)=%s', (sid, month, year))
+    curs.execute('select * from schedule inner join classes using (cid) where sid=%s and monthname(classDate)=%s and year(classDate)=%s group by classDate', (sid, month, year))
     rows = curs.fetchall()
     return rows
 
@@ -99,9 +99,16 @@ def getStudentByID(sid):
     return student
 
 #Get class slot given class id
-def getClass(cid):
+def getClassbyID(cid):
   curs = cursor() # results as Dictionaries
   curs.execute('select * from classes where cid=%s', (cid,))
+  return curs.fetchone()
+
+#Get class slot given date and student
+def getClassbyDate(classDate,username):
+  curs = cursor() # results as Dictionaries
+  sid = getStudent(username)['sid']
+  curs.execute('select * from schedule where classDate=%s and sid=%s', (classDate,sid,))
   return curs.fetchone()
 
 #Get students in a class given class id
@@ -118,6 +125,33 @@ def getAllStudents():
     rows = curs.fetchall()
     return rows
 
+#Get all classes in the next two weeks with spots open at the same grade level as the student rescheduling
+def rescheduleOptions(grade):
+    curs = cursor() # results as Dictionaries
+    curs.execute('select * from (select classes.cid, day,startTime,endTime,grade,classDate,dups from classes,(select * from (select cid, classDate, count(cid) as dups from schedule group by cid,classDate) as counting where counting.dups<=3) as minCount where classes.cid=minCount.cid) as finalShortlist where grade=%s order by classDate',(grade,))
+    """written in MUCH more readable way:
+    select * from (
+      select classes.cid, day,startTime,endTime,grade,classDate,dups from classes,(
+        select * from (
+            select cid, classDate, count(cid) as dups
+            from schedule
+            group by cid,classDate
+        ) as counting
+        where counting.dups<=3
+      ) as minCount
+      where classes.cid=minCount.cid
+     ) as finalShortlist
+     where grade=%s
+     order by classDate;
+    """
+    rows=curs.fetchall()
+    return rows
 
+def reschedule(cid,classDate,username):
+    curs = cursor() # results as Dictionaries
+    sid = getStudent(username)['sid']
+    curs.execute('insert into schedule values(%s, %s, %s, "rescheduled")', (classDate, cid, sid, ))    
 
-
+def cancelClass(classDetails):
+    curs = cursor() # results as Dictionaries
+    curs.execute('delete from schedule where classDate=%s and sid=%s',(classDetails['classDate'],classDetails['sid']))

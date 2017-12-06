@@ -165,7 +165,7 @@ def oneStudent(sid=0):
 
     #Give access only if logged in student is trying to access their own profile or admin
     if student['username'] == session['username'] or session['username'] == 'admin':
-      classRow = final.getClass(student["cid"])
+      classRow = final.getClassbyID(student["cid"])
       return render_template('oneStudent.html',pageTitle=student["name"],
         grade=student["grade"],email=student["email"],
       	phone=student["phone"],rate=student["hour_rate"],joinDate=student["joinDate"],day=classRow["day"].title(),
@@ -180,7 +180,7 @@ def oneClass(cid):
 
   #Only logged in individuals can access
   if 'username' in session:
-    classRow=final.getClass(cid)
+    classRow=final.getClassbyID(cid)
     classStudents = final.getClassStudents(cid)
     student = final.getStudent(session['username'])
 
@@ -245,6 +245,34 @@ def schedule(sid=0, month=None, year=None):
 
     flash ("You don't have permission to access this page.")
     return redirect(url_for('index')) 
+
+@app.route('/reschedule/<cid>/<classDate>',methods=['GET','POST'])
+@app.route('/reschedule/<classDate>', methods=['GET','POST'])
+def reschedule(classDate, cid=None):
+	if 'username' in session and session['username']!="admin":
+		if cid is None:
+			dateSpecific = final.getClassbyDate(classDate,session['username'])
+			staticInfo = final.getClassbyID(dateSpecific['cid'])
+			if request.method=='GET':
+				return render_template('reschedule.html',pageTitle='Reschedule', dateSpecific = dateSpecific, staticInfo = staticInfo)
+	  		
+	  		if request.form["submit"]=='No':
+	  			flash('Ok. Your class has not been cancelled.')
+	  			return redirect(url_for('schedule'))
+	  		if request.form["submit"]=='Yes':
+	  			final.cancelClass(dateSpecific)
+	   			return redirect(url_for('findNewClass',grade=staticInfo['grade']))
+	   	final.reschedule(cid,classDate,session['username'])
+		flash('Thank You. Your class has been rescheduled')
+		return redirect(url_for('schedule'))
+	return redirect(url_for('index'))
+
+@app.route('/newClass/<grade>',methods=['GET','POST'])
+def findNewClass(grade):
+	if 'username' in session and session['username']!="admin":
+		if request.method=='GET':
+			return render_template('newClass.html', pageTitle='Alternate Classes',allClasses=final.rescheduleOptions(grade), grade=grade)
+	return redirect(url_for('index'))
 
 @app.route('/admin-schedule')
 def adminSchedule():
