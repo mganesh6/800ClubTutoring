@@ -126,24 +126,26 @@ def getAllStudents():
     return rows
 
 #Get all classes in the next two weeks with spots open at the same grade level as the student rescheduling
-def rescheduleOptions(grade):
+def rescheduleOptions(grade,cid):
     curs = cursor() # results as Dictionaries
-    curs.execute('select * from (select classes.cid, day,startTime,endTime,grade,classDate,dups from classes,(select * from (select cid, classDate, count(cid) as dups from schedule group by cid,classDate) as counting where counting.dups<=3) as minCount where classes.cid=minCount.cid) as finalShortlist where grade=%s and classDate>=NOW() and classDate<=NOW()+INTERVAL 2 WEEK order by classDate',(grade,))
-    """written in MUCH more readable way:
+    curs.execute('select * from (select classes.cid, day,startTime,endTime,grade,classDate,classCount from classes,(select * from (select cid, classDate, count(cid) as classCount from schedule group by cid,classDate) as counting where counting.classCount<=3) as minCount where classes.cid=minCount.cid) as finalShortlist where grade=%s and classDate>=NOW() and classDate<=NOW()+INTERVAL 2 WEEK and finalShortlist.cid!=%s order by classDate',(grade,cid,))
+    """
+    written in MUCH more readable way:
     select * from (
-      select classes.cid, day,startTime,endTime,grade,classDate,dups from classes,(
+      select classes.cid,day,startTime,endTime,grade,classDate,classCount from classes,(
         select * from (
-            select cid, classDate, count(cid) as dups
+            select cid, classDate, count(cid) as classCount
             from schedule
             group by cid,classDate
         ) as counting
-        where counting.dups<=3
+        where counting.classCount<=3
       ) as minCount
       where classes.cid=minCount.cid
      ) as finalShortlist
      where grade=12
-     and classDate>=NOW
+     and classDate>=NOW()
      and classDate<=NOW()+INTERVAL 2 WEEK
+     and finalShortlist.cid!=2
      order by classDate;
     """
     rows=curs.fetchall()
@@ -160,5 +162,5 @@ def cancelClass(classDetails):
     curs = cursor() # results as Dictionaries
     curs.execute('select classDate,startTime,endTime from schedule,classes where classDate=%s and schedule.sid=%s and schedule.cid=classes.cid',(classDetails['classDate'],classDetails['sid'], ))
     row = curs.fetchone()
-    curs.execute('delete from schedule where classDate=%s and sid=%s',(classDetails['classDate'],classDetails['sid']))
+    curs.execute('update schedule set status="cancelled" where classDate=%s and sid=%s',(classDetails['classDate'],classDetails['sid']))
     return row

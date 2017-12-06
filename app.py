@@ -247,36 +247,38 @@ def schedule(sid=0, month=None, year=None):
     flash ("You don't have permission to access this page.")
     return redirect(url_for('index')) 
 
-@app.route('/reschedule/view/<grade>', methods=['GET'])
 @app.route('/reschedule/cancel/<classDate>', methods=['GET','POST'])
-@app.route('/reschedule/book/<cid>/<classDate>',methods=['GET'])
-def reschedule(classDate=None, cid=None, grade=None):
+@app.route('/reschedule/book/<cid>/<classDate>',methods=['GET','POST'])
+def reschedule(classDate=None, cid=None):
   if 'username' in session and session['username']!="admin":
     username=session['username']
-    try:
-      if grade is not None and final.getStudent(username)['grade']==grade:
-        return render_template('newClass.html', pageTitle='Alternate Classes',
-        allClasses=final.rescheduleOptions(grade), grade=grade)
+    # try:
 
-      if cid is None:
-        dateSpecific = final.getClassbyDate(classDate,session['username'])
-        if dateSpecific is not None:
-          classInfo = final.getClassbyID(dateSpecific['cid'])
-          if request.method=='GET':	return render_template('rescheduleConfirm.html',pageTitle='Reschedule',
-            dateSpecific=dateSpecific, classInfo=classInfo)
-          if request.form["submit"]=='No': flash('Ok. Your class has not been cancelled.')
-          if request.form["submit"]=='Yes':
-            final.cancelClass(dateSpecific)
-            return redirect(url_for('reschedule',grade=classInfo['grade']))
-        else: flash("You do not have permission to access this page")
-        return redirect(url_for('schedule'))
-      
-      elif cid is not None and classDate is not None:
-        added = final.reschedule(cid,classDate,username)
-        return render_template('newClassConfirm.html', pageTitle='Your Booking',added=added)
+    if cid is None:
+      dateSpecific = final.getClassbyDate(classDate,username)
+       
+      if dateSpecific is not None:
+        cid=dateSpecific['cid']
+         
+        if request.method=='GET':	return render_template('cancelConfirm.html',pageTitle='Reschedule',
+          dateSpecific=dateSpecific, classInfo=final.getClassbyID(cid))
+          
+        if request.form["submit"]=='Yes':
+          grade = final.getStudent(username)['grade']
+          return render_template('altClasses.html',pageTitle='Alternate Classes',
+          allClasses=final.rescheduleOptions(grade,cid),
+          deleted=final.cancelClass(dateSpecific))  
+
+        if request.form["submit"]=='No': flash('Ok. Your class has not been cancelled.')
+        
+      else: flash("You do not have permission to access this page")
+      return redirect(url_for('schedule'))
+     
+    else: return render_template('newClassConfirm.html',pageTitle='Your Booking',
+      added=final.reschedule(cid,classDate,username))
     
-    except Exception as err:
-      flash('Some kind of error '+str(err))
+    # except Exception as err:
+    #   flash('Some kind of error '+str(err))
   return redirect(url_for('index'))
 
 @app.route('/admin-schedule')
