@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% block navbar %}
+
+<!-- Sign in Link -->
+<li class="nav-item">
+    <a class="nav-link js-scroll-trigger" data-toggle="modal" data-target="#signModal">Sign In</a>
+    
+    <!-- Popup of sign in page -->
+    <div class="modal fade" id="signModal" role="dialog" data-backdrop="false">
+        <div class="modal-dialog">
+            <!-- Content contained within the login popup -->
+            <div class="modal-content" style="font-family:Helvetica;">
+                
+                <!-- Title, close x -->                
+                <div class="modal-header" style="padding-left:4%; padding-top:4%">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2>Sign In</h2>
+                </div>                
+
+                <!-- Main body of sign in page -->                
+                <div class="modal-body" style="left:15%; top:15px;">
+                    <!-- Form that asks for student login info: username, password-->
+                    <form id="loginform" action="{{url_for('login')}}" method="post" class="form-horizontal">
+                        
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="exampleInputEmail3">Username</label>
+                            <div class="col-sm-5">
+                                <input type="text" name="username" class="form-control" placeholder="Username" required pattern="^\w+$">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="exampleInputPassword3">Password</label>
+                            <div class="col-sm-5">
+                                <input type="password" name="password" class="form-control" placeholder="Password" required>
+                            </div>
+                        </div>
+                     
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-5">
+                                <button type="submit" class="btn-square btn-default">Sign in</button>
+                            </div>
+                        </div>
+                    </form>                        
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn-square btn-default" data-dismiss="modal">Close</button>
+                </div>
+                    
+            </div>
+            
+        </div>
+    </div>
+</li>
+
+<!-- Join Now Link -->
+<li class="nav-item">
+    <a class="nav-link js-scroll-trigger" data-toggle="modal" data-target="#joinModal">Join Now</a>
+    
+    <!-- Popup of join now page -->
+    <div class="modal fade" id="joinModal" role="dialog" data-backdrop="false">
+        <div class="modal-dialog">
+            <div class="modal-content" style="font-family:Helvetica;">
+
+                <div class="modal-header" style="padding-left:4%; padding-top:4%">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2>Join 800Club</h2>
+                </div>                   
+                
+                <div class="modal-body" style="left:5%; top:15px;">
+                    
+                    <form id="joinform" action="{{url_for('join')}}" method="post" class="form-horizontal">
+                        
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="exampleInputEmail3">Username</label>
+                            <div class="col-sm-5">
+                                <input type="text" name="username" class="form-control" placeholder="Username" required pattern="^\w+$">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="exampleInputEmail3">Full Name</label>
+                            <div class="col-sm-5">
+                                <input type="text" name="name" class="form-control" placeholder="Full Name" required>
+                            </div>
+                        </div>   
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="exampleInputEmail3">Email</label>
+                            <div class="col-sm-5">
+                                <input type="email" name="email" class="form-control" placeholder="Email" required>
+                            </div>
+                        </div> 
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="exampleInputEmail3">Phone</label>
+                            <div class="col-sm-5">
+                                <input type="number" name="phone" class="form-control" placeholder="Phone Number" required>
+                            </div>
+                        </div>  
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="exampleInputEmail3">Grade</label>
+                            <div class="col-sm-5">
+                                <input type="number" name="grade" class="form-control" min="1" max="12" placeholder="School Grade" required>
+                            </div>
+                        </div>                            
+                        
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="exampleInputPassword3">Password</label>
+                            <div class="col-sm-5">
+                                <input type="password" name="password1" class="form-control" placeholder="Password" pattern=".{8,}" required title="8 characters minimum">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="exampleInputPassword3">Confirm Password</label>
+                            <div class="col-sm-5">
+                                <input type="password" name="password2" class="form-control" placeholder="Confirm Password" required>
+                            </div>
+                        </div>
+                        
+                        <!-- Displaying all classes offered by the tutition center, asks for student preference -->
+                        {% if classes %}
+                            <h3>Class Preference</h3>
+                            Select the class that you would like to join most.
+                            <div class="dropdown">
+                                <select name="classChoice" class="btn-square btn-default dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" required>
+                                    <span class="caret"></span>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <option value="" disabled selected>Select a class</option>
+                                {% for class in classes %}
+                                    <li><option value="{{class.cid}}" class="btn btn-outline btn-xl" required>{{class.day}}, {{class.startTime}}-{{class.endTime}}</option></li>
+                                {% endfor %}
+                                </ul>
+                                </select>
+                            </div>
+                        {% endif %}
+
+                        <br><div class="form-group col-sm-offset-4">
+                            <button type="submit" class="btn-square btn-default">Sign up</button>
+                        </div>
+                    </form>                        
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn-square btn-default" data-dismiss="modal">Close</button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</li>
+{% endblock %}
+
+{% block hideBlock %}
+style="display:None;"
+{% endblock %}
+    
+{% block jquery_scripts %}
+<script>
+$("#joinform").on('submit', function (event) {
+     var pw1 = $(this).find('[name=password1]').val();
+     var pw2 = $(this).find('[name=password2]').val();
+     // should also check for length and common words etc
+     if( pw1 != pw2 ) {
+         // something more sophisticated than alert would be nice
+         alert("passwords don't match");
+     }
+});
+</script>
+{% endblock %}

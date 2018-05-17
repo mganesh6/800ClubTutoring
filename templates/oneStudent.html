@@ -1,0 +1,61 @@
+
+{% if session['username'] =="admin" %}
+  {% extends "logAdmin.html" %}
+{% else %}
+  {% extends "logUser.html" %}
+{% endif %}
+ 
+{# replaces default content block #}
+{% block content %} 
+
+    <!--Form that shows all movie data. Contains fields that user can update-->          
+      <table class="table table-hover">
+        <tr>
+          <td><label>Grade</label></td>
+          <td>{{studentRow.grade}}</td>
+        </tr>
+        <tr>
+          <td><label>Email</label></td>
+          <td>{{studentRow.email}}</td>
+        </tr>
+        <tr>
+          <td><label>Phone</label></td>
+          <td>{{studentRow.phone}}</td>
+        </tr>
+        <tr>
+          <td><label>Hourly Rate</label></td>
+          <td>${{studentRow.hour_rate}}</td>
+        </tr>
+        <tr>
+          <td><label>Join Date</label></td>
+          <td>{{studentRow.joinDate}}</td>
+        </tr>
+        <tr>
+          <td><label>Main Class</label></td>
+          <td>
+          {% if session['username']=="admin" %}
+            <a href="/class/{{classRow.cid}}">{{classRow.day}}, {{classRow.startTime}} - {{classRow.endTime}}</a>
+          {% else %}
+            {{classRow.day.title()}}, {{classRow.startTime}} - {{classRow.endTime}}
+          {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <td><label>Payment Info</label></td>
+          <td>
+            <a href="/student/payment/{{studentRow.username}}">View</a>
+          </td>
+        </tr>
+        <tr>
+          <td><label>Uploaded Files</label></td>
+          <td>
+            <a href="/documents/{{studentRow.username}}">View</a>
+          </td>
+        </tr>
+      </table>
+
+{% if session['username'] =="admin" %}
+  <a href="/schedule/{{studentRow.sid}}" class="btn btn-outline btn-xl">Classes Record</a>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "logAdmin.html" %}
+ 
+{# replaces default content block #}
+{% block content %} 
+    <!--Form that shows all movie data. Contains fields that user can update-->          
+      <table class="table table-hover">
+        <tr>
+          <td><label>Grade </label></td>
+          <td>{{classInfo.grade}}</td>
+        </tr>
+        <tr>
+          <td><label>Day </label></td>
+          <td>{{classInfo.day}}</td>
+        </tr>
+        <tr>
+          <td><label>Time </label></td>
+          <td>{{classInfo.startTime}} to {{classInfo.endTime}}</td>
+        </tr>
+        <tr>
+          <td><label>Weekly Students</label></td>
+          <td>
+          {% for student in allStudents %}
+              <a href="/student/{{student.sid}}/">{{student.name}}</a><br>
+          {% endfor %} 
+          </td>
+        </tr>
+        
+      </table>
+
+{% endblock %}

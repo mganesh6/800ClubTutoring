@@ -1,0 +1,30 @@
+{% extends "logUser.html" %}
+
+{% block content %} 
+<div class="page-header" style="text-align: center;">
+  <h1>Select an Alternative Class</h1>
+</div>
+<br>
+<p>Thank you! We will cancel your class on {{deleted.classDate}}. Please choose an alternate time slot that you can attend. 
+
+<br>Below are the classes with spaces remaining. If there are no open classes, please check back later as more spots may open up as other students reschedule their classes.
+
+<form method=POST action="">
+        <table>
+        <tr>
+          <th>Date</th>
+          <th>Day</th>
+          <th>Time</th>
+        </tr>
+        {% for class in allClasses %}
+          <tr>
+            <td>{{class.classDate}}</td>
+            <td>{{class.day}}</td>
+            <td> {{class.startTime}} - {{class.endTime}} </td>
+			      <td><a href= "{{url_for('reschedule',classDate=class.classDate, cid=class.cid)}}" class="btn btn-outline btn-xl">Select</a></td>
+            </tr>
+        {% endfor %} 
+        </table>
+</form>
+
+{% endblock %} 
