@@ -1,0 +1,11 @@
+{% extends "logUser.html" %}
+
+{% block content %} 
+<div class="page-header" style="text-align: center;">
+  <h1>Thank You!</h1>
+</div>
+<p> This is a confirmation of your booking. Your class has now been rescheduled. 
+<p>It has been changed to {{added.classDate}} from {{added.startTime}} to {{added.endTime}}.
+<p>Please screenshot this page for your records. 
+<br>
+{% endblock %} 

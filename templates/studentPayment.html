@@ -1,0 +1,56 @@
+<style>
+
+th, tr{
+	text-align: center !important;
+}
+
+</style>
+
+{% if username == 'admin' %}
+	{% extends "logAdmin.html" %}
+{% else %}
+	{% extends "logUser.html" %}
+{% endif %}
+
+{% block content %} 
+	<div class="page-header" style="text-align: center;">
+	  <h1>Past & Upcoming Payments</h1>
+	</div>
+	
+	<div>
+
+		<table class="table table-striped" style="background: white !important;">
+			<thead class="thead-inverse">
+				  <tr>
+				    <th>Month</th>
+				    <th>Year</th> 
+				    <th>Amount Due</th>
+				    <th>Status</th>
+				    <th>Date Paid <br>(mm/dd/yyyy)</th>
+				  </tr>
+				 </thead>
+				 <tbody>
+				  {% with payment = paymentInfo %}
+				  	{% if payment %}
+				  		{% for p in payment %}
+							<tr>
+								<td>{{p.month}}</td>
+								<td>{{p.year}}</td>
+								<td>${{p.amount_due}}</td>
+								<td>{{p.status}}</td>
+								<td>
+									{% if p.payDate == '00-00-0000' %}
+										Awaiting Payment
+									{% else %}
+										{{p.payDate}}
+									{% endif %}
+								</td>
+							</tr>
+						{% endfor %}
+					{% endif %}
+				  {% endwith %}
+				</tbody>
+			</table>
+		
+	</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+<style>
+
+th, tr{
+	text-align: center !important;
+}
+
+</style>
+
+
+{% extends "logAdmin.html" %}
+
+
+{% block content %} 
+<div class="page-header" style="text-align: center;">
+<!--   <a href="/admin-schedule/edit"><h4><span class="glyphicon glyphicon-edit" style="padding-left:60%"></span> Edit</h4></a>
+ -->  <h1>Schedule for</h1>
+  <h3> {{startDate}} to {{endDate}}</h3>
+  <br><a href="/admin-schedule/{{weeks - 1}}" class="btn btn-outline btn-xl">Prev</a>
+  <a href="/admin-schedule/" class="btn btn-outline btn-xl">Current</a>
+  <a href="/admin-schedule/{{weeks + 1}}" class="btn btn-outline btn-xl">Next</a>
+
+</div>
+<div>
+<br>
+	  {% with classDays = days %}
+		  	{% if classDays %}
+			  	{% for d in classDays %}
+			  		<h3>{{d}}</h3>	
+				  	
+				  	<table class="table" style="">
+
+					 <thead class="thead-inverse">
+					 	<tr>
+					 		<th></th>
+					 		<th>Start Time</th>
+					 		<th>End Time</th>
+					 		<th>Grade</th>
+					 		<th>Students<th>
+						</tr>
+					 </thead>
+					 <tbody data-link="row" class="rowlink">
+					  	{% with totalSlots = slots %}
+						  	{% if totalSlots %}
+						  		{% for key, value in totalSlots.items() %}
+						  		  {% if value[0].day == d %}
+						  			<tr>
+						  				<td><a href='/class/{{key}}/'>{{value[0].classDate.strftime('%m-%d-%Y')}}</a><br>
+						  					<a href="/attendance/{{weeks}}/{{value[0].classDate}}/{{value[0].cid}}" style="text-decoration: underline; color: black">Attendance</a>
+						  				</td>
+
+						  				<td>{{value[0].startTime}}</td>
+										<td>{{value[0].endTime}}</td>
+										<td>{{value[0].grade}}</td>
+										<td>
+							  				{% for t in value %}
+							  					{% if t.status == 'cancelled'%}
+												 	<a href="/student/{{t.sid}}" style="color: #dc2430">{{t.name}} ({{t.status}})</a><br>
+												{% elif t.status == 'rescheduled' %}
+													<a href="/student/{{t.sid}}" style="color: #7b4397">{{t.name}} ({{t.status}})</a><br>
+												{% elif t.status == 'attended' %}
+													<a href="/student/{{t.sid}}" style="color: #4a4c4d">{{t.name}} ({{t.status}})</a><br>
+												{% else %}
+													<a href="/student/{{t.sid}}" style="color: black; text-decoration: underline">{{t.name}}</a><br>
+												{% endif %}
+											{% endfor %}
+										</td>
+									</tr>
+								  {% endif %}
+								{% endfor %}
+							{% endif %}
+						{% endwith %}
+					</tbody>
+				 </table>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+	</div>
+	{% endblock %}
